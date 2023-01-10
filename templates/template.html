@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        fontFamily: {
+          'inter': ['Inter', 'sans-serif'],
+        },
+        plugins: [
+          require('@tailwindcss/forms'),
+          // ...
+        ],
+        extend: {
+          colors: {
+            clifford: '#da373d',
+          }
+        }
+      }
+    }
+  </script>
+
+  <title>Stocks</title>
+</head>
+
+<body class="bg-slate-900 font-[inter] ">
+  <footer class="bg-cover">
+    <svg class="absolute bottom-0" width="1440" height="161" viewBox="0 0 1440 161" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M0 129L48 113C96 97 192 65 288 38.3C384 12 480 -9.99998 576 6.30002C672 22 768 76 864 91.7C960 108 1056 86 1152 91.7C1248 97 1344 129 1392 145L1440 161H1392C1344 161 1248 161 1152 161C1056 161 960 161 864 161C768 161 672 161 576 161C480 161 384 161 288 161C192 161 96 161 48 161H0V129Z"
+        fill="#5EA4DB" />
+    </svg>
+
+  </footer>
+  {% block content %}
+  {% endblock %}
+
+
+</body>
+
+</html>

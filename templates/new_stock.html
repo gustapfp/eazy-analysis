@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block content %}
+<main>
+    <form class="form mt-20" >
+        <fieldset class="flex flex-col text-white items-center text-left">
+            <div class="flex flex-col my-2 w-2/5">
+                <label class="font-semibold text-xl mt-4 mb-2" for="company">Company Name</label>
+                <input class="bg-slate-400 font-light rounded-md mb-1" type="text" id="company" name="company">
+            </div>
+            <div class="flex flex-col my-2 w-2/5">
+                <label  class="font-semibold text-xl mb-2" for="ticket">Ticket</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1" type="text" id="ticket" name="ticket">
+            </div>
+            <div class="flex flex-col my-2 w-2/5">
+                <label  class="font-semibold text-xl mb-2" for="price">Price (R$)</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1" type="text" id="price" name="price">
+            </div>
+            <div class="flex flex-col mx-24  my-2 w-2/5">
+                <label  class="font-semibold text-xl text-left mb-2 justify-items-start" for="market_cap">Market Cap (R$ Billions)</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1" type="text" id="market_cap" name="market_cap">
+            </div>
+            <div class="flex justify-center mt-8 w-1/5">
+                <button type="submit" class=" w-full py-2.5 bg-slate-700 rounded-md font-bold">Save</button>
+            </div>           
+            
+        </fieldset>
+
+    </form>
+</main>
+{% endblock %}

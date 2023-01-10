@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+{% block content %}
+  <main>
+    <div>
+      <h1 class="text-5xl font-bold my-8 mx-12 underline text-white font-bold">Stocks</h1>
+
+    </div>
+    <div class="flex justify-center">
+      <table class="text-white border-collapse border border-zinc-500 text-center ">
+        <tr class="">
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-700">Company</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-700">Ticket</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-700">Price (R$)</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-700">Market Cap (R$ Billions)</td>
+        </tr>
+        {% for stock in stock_list %}
+        <tr>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-500 font-light">{{stock.company_name}}</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-500 font-light">{{stock.ticket}}</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-500 font-light">{{stock.price}}</td>
+          <td class="border border-zinc-400 px-8 py-6 bg-slate-500 font-light">{{stock.market_cap}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </main>
+{% endblock %}
