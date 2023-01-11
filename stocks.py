@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
-app = Flask(__name__)
+
 
 
 class Stock:
@@ -18,6 +18,7 @@ bbdc4 =  Stock('Bradesco', 'BBDC4', 15.19, 152.37 )
 nubr33 = Stock('Nu Holdings Ltd', 'NUBR33', 3.10, 86.73)
 stock_list = [itub4, bbdc4, nubr33]
         
+app = Flask(__name__) 
 
 @app.route('/')
 def home():
@@ -26,6 +27,19 @@ def home():
 @app.route('/new_stock')
 def new_stock():
     return render_template("new_stock.html")
+
+@app.route('/create_stock', methods=['POST', ])
+def create_stock():
+    company_name = request.form['company_name']
+    ticket = request.form['ticket']
+    price = request.form['price']
+    market_cap = request.form['market_cap']
+
+    stock = Stock(company_name, ticket, price, market_cap)
+    stock_list.append(stock)
+
+    return redirect(url_for('home'))
+
 
 
 
