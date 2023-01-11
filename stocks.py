@@ -27,6 +27,8 @@ def home():
 
 @app.route('/new_stock')
 def new_stock():
+    if 'user_log' not in session or session['user_log'] == None:
+        return redirect(('login'))
     return render_template("new_stock.html")
 
 @app.route('/create_stock', methods=['POST', ])
