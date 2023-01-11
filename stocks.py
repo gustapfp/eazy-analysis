@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 
 
@@ -19,6 +19,7 @@ nubr33 = Stock('Nu Holdings Ltd', 'NUBR33', 3.10, 86.73)
 stock_list = [itub4, bbdc4, nubr33]
         
 app = Flask(__name__) 
+app.secret_key = 'teste'
 
 @app.route('/')
 def home():
@@ -50,8 +51,11 @@ def autentification():
     password = request.form['password']
 
     if username == 'guga' and password == 'teste':
+        session['user_log'] = request.form['username']
+        flash(session['user_log'] + ' login succeed.')
         return redirect(url_for('home'))
-        
+
+    flash(session['user_log'] + ' login invalid!')
     return redirect('/login')
 
 

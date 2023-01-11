@@ -36,16 +36,32 @@
 
 <body class="bg-slate-900 font-[inter] relative">
   <nav class=" my-8 mx-12  ">
-    <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('home')}}" >Stocks</a>
+    <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('home')}}">Stocks</a>
     <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('new_stock')}}">New Stock</a>
-   
+
   </nav>
-  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul id="messages">
+    {% for message in messages %}
+    <li>
+      <div class="bg-cyan-700 text-center py-4 my-4 lg:px-4">
+        <div class="p-2 bg-cyan-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+          <span class="font-semibold mr-2 text-left flex-auto">{{ message }}</span>
+        </div>
+      </div>
+    </li>
+    
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
 
   {% block content %}
   {% endblock %}
 
-  
+
   <footer class="absolute top-[80vh] mt-8">
     <svg class="hidden lg:block" width="1440" height="161" viewBox="0 0 1440 161" fill="none"
       xmlns="http://www.w3.org/2000/svg">
