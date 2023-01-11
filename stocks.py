@@ -40,6 +40,19 @@ def create_stock():
 
     return redirect(url_for('home'))
 
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+@app.route('/autentification', methods=['POST', ])
+def autentification():
+    username = request.form['username']
+    password = request.form['password']
+
+    if username == 'guga' and password == 'teste':
+        return redirect(url_for('home'))
+        
+    return redirect('/login')
 
 
 
