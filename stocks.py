@@ -35,6 +35,14 @@ users_list = {
 app = Flask(__name__) 
 app.secret_key = 'teste'
 
+app.config['SQLACHEMY_DATABASE_URI'] = '{SGBD}://{user}:{password}@{server}/database'.format(
+    SGBD = 'mysql+mysqlconnector',
+    usuario = 'root',
+    senha = 'admin',
+    servidor = 'localhost',
+    database = 'jogoteca'
+)
+
 
 
 @app.route('/')
