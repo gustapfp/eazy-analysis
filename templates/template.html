@@ -35,10 +35,15 @@
 </head>
 
 <body class="bg-slate-900 font-[inter] relative">
-  <nav class=" my-8 mx-12  ">
-    <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('home')}}">Stocks</a>
-    <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('new_stock')}}">New Stock</a>
-
+  <nav class=" m-12  flex place-content-between items-center">
+    <div>
+      <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('home')}}">Stocks</a>
+      <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('new_stock')}}">New Stock</a>
+    </div>
+    <div>
+      <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('login')}}">Login</a>
+      <a class="text-3xl font-bold underline text-white font-bold px-4" href="{{url_for('logout')}}">Logout</a>      
+    </div>
   </nav>
   {% with messages = get_flashed_messages() %}
   {% if messages %}

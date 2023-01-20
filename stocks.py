@@ -1,52 +1,47 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt, check_password_hash
 
-
-
-
-class Stock:
-    def __init__(self, company_name, ticket, price, market_cap) -> None:
-        self.company_name = company_name
-        self.ticket = ticket
-        self.price = price
-        self.market_cap = market_cap
-
-class User:
-    def __init__(self, name, nickname, password):
-        self.name = name
-        self.nickname = nickname
-        self.password = password
-
-
-
-
-itub4 = Stock('Itaú Unibanco', 'ITUB4', 25.87, 238.03)
-bbdc4 =  Stock('Bradesco', 'BBDC4', 15.19, 152.37 )
-nubr33 = Stock('Nu Holdings Ltd', 'NUBR33', 3.10, 86.73)
-stock_list = [itub4, bbdc4, nubr33]
-
-user1 = User('Gustavo', 'gustapfp', '1234')
-user2 = User('Maria','mary', '1234')
-
-users_list = {
-    user1.nickname:user1,
-    user2.nickname:user2
-}
-        
 app = Flask(__name__) 
 app.secret_key = 'teste'
 
-app.config['SQLACHEMY_DATABASE_URI'] = '{SGBD}://{user}:{password}@{server}/database'.format(
-    SGBD = 'mysql+mysqlconnector',
-    usuario = 'root',
-    senha = 'admin',
-    servidor = 'localhost',
-    database = 'jogoteca'
-)
+bcrypt = Bcrypt(app)
 
 
+
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    '{SGBD}://{user}:{password}@{server}/{database}'.format(
+        SGBD = 'mysql+mysqlconnector',
+        user = 'root',
+        password = 'root',
+        server = 'localhost',
+        database = 'stock_market'
+    )
+
+db = SQLAlchemy(app)
+
+class Stocks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(50), nullable=False)
+    ticket = db.Column(db.String(8), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    market_cap = db.Column(db.Float, nullable=False)
+
+    def __repr__(self) -> str:
+        return '<Name %r>' % self.name
+
+class Users(db.Model):
+    name = db.Column(db.String(50), nullable=False)
+    nickname = db.Column(db.String(8), primary_key=True)
+    password = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self) -> str:
+        return '<Name %r>' % self.name
 
 @app.route('/')
 def home():
+    stock_list = Stocks.query.order_by(Stocks.id)
+    print(stock_list)
     return render_template('home.html', stock_list=stock_list)
 
 @app.route('/new_stock')
@@ -58,12 +53,13 @@ def new_stock():
 
 @app.route('/create_stock', methods=['POST', ])
 def create_stock():
+    stock_list = Stocks.query.order_by(Stocks.id)
     company_name = request.form['company_name']
     ticket = request.form['ticket']
     price = request.form['price']
     market_cap = request.form['market_cap']
 
-    stock = Stock(company_name, ticket, price, market_cap)
+    stock = Stocks(company_name, ticket, price, market_cap)
     stock_list.append(stock)
 
     return redirect(url_for('home'))
@@ -76,15 +72,15 @@ def login():
 
 @app.route('/autentification', methods=['POST', ])
 def autentification():
-    username = request.form['username']
-    password = request.form['password']
+    if 'username' in request.form and 'password' in request.form:
+        user = Users.query.filter_by(nickname=request.form['username']).first()
+        password = check_password_hash(user.password, request.form['password'])
 
-    if username in users_list:
-        user = users_list[username]
-        if password == users_list[username].password:
-            session['user_log'] = user.nickname
-            flash(user.nickname + ' login succeed.')
-            next_page = request.form['next']
+    if user and password:
+        session['user_log'] = user.nickname
+        flash(user.nickname + ' login succeed.')
+        next_page = request.form.get('next')
+        if next_page:
             return redirect(next_page)
     else:
         flash('Login invalid!')

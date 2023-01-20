@@ -29,6 +29,7 @@ TABLES['Stocks'] = ('''
       CREATE TABLE `stocks` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `company_name` varchar(50) NOT NULL,
+      `ticket` varchar(8) NOT NULL,
       `price` DOUBLE NOT NULL,
       `market_cap` DOUBLE NOT NULL,
       PRIMARY KEY (`id`)
@@ -61,7 +62,7 @@ user_sql = 'INSERT INTO users (name, nickname, password) VALUES (%s, %s, %s)'
 user = [
       ("Bruno Divino", "BD", generate_password_hash("12345678").decode('utf-8')),
       ("Camila Ferreira", "Mila", generate_password_hash("87654321").decode('utf-8')),
-      ("Guilherme Louro", "Cake", generate_password_hash("12344321").decode('utf-8'))
+      ("Gustavo Figueiredo", "Guga", generate_password_hash("12344321").decode('utf-8'))
 ]
 cursor.executemany(user_sql, user)
 
@@ -70,14 +71,14 @@ print(' -------------  Usuários:  -------------')
 for user in cursor.fetchall():
     print(user[1])
 
-# inserindo jogos
-stocks_sql = 'INSERT INTO jogos (company_name, price, market_cap) VALUES (%s, %s, %s)'
-stocks = [
+
+stocks_sql = 'INSERT INTO stocks (company_name, ticket,  price, market_cap) VALUES (%s, %s, %s , %s)'
+stock = [
       ('Itaú Unibanco', 'ITUB4', 25.87, 238.03),
       ('Bradesco', 'BBDC4', 15.19, 152.37 ),
       ('Nu Holdings Ltd', 'NUBR33', 3.10, 86.73),
 ]
-cursor.executemany(stocks_sql, stocks)
+cursor.executemany(stocks_sql, stock)
 
 cursor.execute('select * from stock_market.stocks')
 print(' -------------  Stocks:  -------------')
