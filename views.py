@@ -1,8 +1,10 @@
 from flask import render_template, request, redirect, url_for, session, flash
 from models import Stocks, Users
 from flask_bcrypt import check_password_hash
-from main import app
+from main import app, db
 
+
+# app views:
 
 @app.route('/')
 def home():
@@ -12,23 +14,30 @@ def home():
 
 @app.route('/new_stock')
 def new_stock():
-    if session['user_log'] not in session or session['user_log'] == None:
-        print("oi")
-        return redirect(url_for('login', proxima=url_for('new_stock')))
+    if 'user_log' not in session or session['user_log'] == None:
+        return redirect(url_for('login', next=url_for('new_stock')))
     return render_template("new_stock.html")
 
 @app.route('/create_stock', methods=['POST', ])
 def create_stock():
-    stock_list = Stocks.query.order_by(Stocks.id)
     company_name = request.form['company_name']
     ticket = request.form['ticket']
     price = request.form['price']
     market_cap = request.form['market_cap']
 
-    stock = Stocks(company_name, ticket, price, market_cap)
-    stock_list.append(stock)
+    stock = Stocks.query.filter_by(company_name=company_name).first()
+
+    if stock:
+        flash("Stock already register")
+
+    stock = Stocks(company_name=company_name, ticket=ticket, price=price, market_cap=market_cap)
+    db.session.add(stock)
+    db.session.commit()
 
     return redirect(url_for('home'))
+
+
+# User views
 
 @app.route('/login')
 def login():
@@ -45,7 +54,7 @@ def autentification():
     if user and password:
         session['user_log'] = user.nickname
         flash(user.nickname + ' login succeed.')
-        next_page = request.form.get('next')
+        next_page = request.form['next']
         if next_page:
             return redirect(next_page)
     else:
