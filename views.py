@@ -36,6 +36,28 @@ def create_stock():
 
     return redirect(url_for('home'))
 
+@app.route('/edit_stock/<int:id>')
+def edit_stock(id):
+    if 'user_log' not in session or session['user_log'] == None:
+        return redirect(url_for('login', next=url_for('update_stock')))
+    stock = Stocks.query.filter_by(id=id).first()
+    return render_template("update.html", stock=stock)
+
+@app.route('/update_stock', methods=['POST',])
+def update_stock():
+    stock = Stocks.query.filter_by(id=request.form['id']).first()
+    stock.company_name = request.form['company_name']
+    stock.ticket = request.form['ticket']
+    stock.price = request.form['price']
+    stock.market_cap = request.form['market_cap']
+
+    db.session.add(stock)
+    db.session.commit()
+
+    return redirect(url_for('home'))
+
+
+    
 
 # User views
 
