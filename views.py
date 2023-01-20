@@ -1,42 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt, check_password_hash
+from flask import render_template, request, redirect, url_for, session, flash
+from models import Stocks, Users
+from flask_bcrypt import check_password_hash
+from main import app
 
-app = Flask(__name__) 
-app.secret_key = 'teste'
-
-bcrypt = Bcrypt(app)
-
-
-
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    '{SGBD}://{user}:{password}@{server}/{database}'.format(
-        SGBD = 'mysql+mysqlconnector',
-        user = 'root',
-        password = 'root',
-        server = 'localhost',
-        database = 'stock_market'
-    )
-
-db = SQLAlchemy(app)
-
-class Stocks(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    company_name = db.Column(db.String(50), nullable=False)
-    ticket = db.Column(db.String(8), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    market_cap = db.Column(db.Float, nullable=False)
-
-    def __repr__(self) -> str:
-        return '<Name %r>' % self.name
-
-class Users(db.Model):
-    name = db.Column(db.String(50), nullable=False)
-    nickname = db.Column(db.String(8), primary_key=True)
-    password = db.Column(db.String(100), nullable=False)
-
-    def __repr__(self) -> str:
-        return '<Name %r>' % self.name
 
 @app.route('/')
 def home():
@@ -91,5 +57,3 @@ def logout():
     session['user_log'] == None
     flash('Logout succeed!')
     return redirect(url_for('home'))
-
-app.run(debug=True)
