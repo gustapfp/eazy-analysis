@@ -2,7 +2,8 @@ from flask import render_template, request, redirect, url_for, session, flash, s
 from models import Stocks, Users
 from flask_bcrypt import check_password_hash
 from main import app, db
-from helpers import return_image
+from helpers import return_image, delete_file
+import time
 
 # app views:
 
@@ -36,7 +37,8 @@ def create_stock():
 
     company_logo = request.files['company_logo']
     upload_path = app.config['UPLOAD_PATH']
-    company_logo.save(f'{upload_path}/logo{stock.id}.jpg')
+    timestamp = time.time()
+    company_logo.save(f'{upload_path}/logo{stock.id}--{timestamp}.jpg')
 
     return redirect(url_for('home'))
 
@@ -59,6 +61,12 @@ def update_stock():
     db.session.add(stock)
     db.session.commit()
 
+    image_file = request.files['company_logo']
+    upload_path = app.config['UPLOAD_PATH']
+    delete_file(id)
+    timestamp = time.time()
+    image_file.save(f'{upload_path}/logo{stock.id}--{timestamp}.jpg')
+
     return redirect(url_for('home'))
 
 @app.route('/delete_stock/<int:id>')
@@ -74,7 +82,7 @@ def delete_stock(id):
 
 @app.route('/image/<file_name>')
 def image(file_name):
-    return send_from_directory('static/uploads', file_name)
+    return send_from_directory('static/uploads/', file_name)
 
 
     
