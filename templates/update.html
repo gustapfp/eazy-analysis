@@ -1,29 +1,45 @@
 {% extends "template.html" %}
 {% block content %}
 <main>
-    <form class="form mt-8" action="{{ url_for('update_stock' )}}" method="post" >
+    <form class="form mt-8" action="{{ url_for('update_stock' )}}" method="post">
         <fieldset class="flex flex-col text-white items-center text-left">
+
+            <figure class="flex flex-row w-2/5 items-center "> 
+                <img class="shrink w-1/6 h-1/6" src="{{ url_for('image', file_name=company_logo) }}">
+                <figcaption class="px-4">
+                    <label>Change logo</label>
+                    <input class="w-full rounded-lg font-bold mb-2" type="file" id="company_logo" name="company_logo"
+                        accept=".jpg, .png" value="Choose a file to upload">
+                </figcaption>
+            </figure>
+
             <input type="hidden" name="id" value="{{ stock.id }}">
             <div class="flex flex-col my-2 w-2/5">
                 <label class="font-semibold text-xl mt-4 mb-2" for="company_name">Company Name</label>
-                <input class="bg-slate-400 font-light rounded-md mb-1 py-1.5 px-1" type="text" id="company_name" name="company_name" value="{{stock.company_name}}">
+                <input class="bg-slate-400 font-light rounded-md mb-1 py-1.5 px-1" type="text" id="company_name"
+                    name="company_name" value="{{stock.company_name}}">
             </div>
             <div class="flex flex-col my-2 w-2/5">
-                <label  class="font-semibold text-xl mb-2" for="ticket">Ticket</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="ticket" name="ticket" value="{{stock.ticket}}">
+                <label class="font-semibold text-xl mb-2" for="ticket">Ticket</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="ticket"
+                    name="ticket" value="{{stock.ticket}}">
             </div>
             <div class="flex flex-col my-2 w-2/5">
-                <label  class="font-semibold text-xl mb-2" for="price">Price (R$)</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="price" name="price" value="{{stock.price}}">
+                <label class="font-semibold text-xl mb-2" for="price">Price (R$)</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="price" name="price"
+                    value="{{stock.price}}">
             </div>
             <div class="flex flex-col mx-24  my-2 w-2/5">
-                <label  class="font-semibold text-xl text-left mb-2 justify-items-start" for="market_cap">Market Cap (R$ Billions)</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="market_cap" name="market_cap" value="{{stock.market_cap}}">
+                <label class="font-semibold text-xl text-left mb-2 justify-items-start" for="market_cap">Market Cap (R$
+                    Billions)</label>
+                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="market_cap"
+                    name="market_cap" value="{{stock.market_cap}}">
             </div>
-            <div class="flex justify-center mt-8 w-1/5">
+
+            <div class="flex justify-center mt-8 mb-4 w-1/5">
                 <button type="submit" class=" w-full py-2.5 bg-slate-700 rounded-md font-bold">Save</button>
-            </div>           
-            
+            </div>
+
         </fieldset>
 
     </form>

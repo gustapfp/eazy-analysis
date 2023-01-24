@@ -1,3 +1,4 @@
+import os
 SECRET_KEY = 'teste'
 
 SQLALCHEMY_DATABASE_URI = \
@@ -8,3 +9,5 @@ SQLALCHEMY_DATABASE_URI = \
         server = 'localhost',
         database = 'stock_market'
     )
+
+UPLOAD_PATH = os.path.dirname(os.path.abspath(__file__)) + '/static/uploads'

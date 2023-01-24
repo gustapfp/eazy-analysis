@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, session, flash, send_from_directory
 from models import Stocks, Users
 from flask_bcrypt import check_password_hash
 from main import app, db
-
+from helpers import return_image
 
 # app views:
 
@@ -34,6 +34,10 @@ def create_stock():
     db.session.add(stock)
     db.session.commit()
 
+    company_logo = request.files['company_logo']
+    upload_path = app.config['UPLOAD_PATH']
+    company_logo.save(f'{upload_path}/logo{stock.id}.jpg')
+
     return redirect(url_for('home'))
 
 @app.route('/edit_stock/<int:id>')
@@ -41,7 +45,8 @@ def edit_stock(id):
     if 'user_log' not in session or session['user_log'] == None:
         return redirect(url_for('login', next=url_for('update_stock')))
     stock = Stocks.query.filter_by(id=id).first()
-    return render_template("update.html", stock=stock)
+    company_logo = return_image(id)
+    return render_template("update.html", stock=stock, company_logo=company_logo)
 
 @app.route('/update_stock', methods=['POST',])
 def update_stock():
@@ -66,6 +71,11 @@ def delete_stock(id):
     flash('Stock deleted.')
 
     return redirect(url_for('home'))
+
+@app.route('/image/<file_name>')
+def image(file_name):
+    return send_from_directory('static/uploads', file_name)
+
 
     
 
