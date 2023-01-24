@@ -56,6 +56,16 @@ def update_stock():
 
     return redirect(url_for('home'))
 
+@app.route('/delete_stock/<int:id>')
+def delete_stock(id):
+    if 'user_log' not in session or session['user_log'] == None:
+        return redirect(url_for('login'))
+
+    Stocks.query.filter_by(id=id).delete()
+    db.session.commit()
+    flash('Stock deleted.')
+
+    return redirect(url_for('home'))
 
     
 
