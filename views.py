@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, session, flash, s
 from models import Stocks, Users
 from flask_bcrypt import check_password_hash
 from main import app, db
-from helpers import return_image, delete_file
+from helpers import return_image, delete_file, UsersForm, StockForm
 import time
 
 # app views:
@@ -17,14 +17,20 @@ def home():
 def new_stock():
     if 'user_log' not in session or session['user_log'] == None:
         return redirect(url_for('login', next=url_for('new_stock')))
-    return render_template("new_stock.html")
+    form = StockForm()
+    return render_template("new_stock.html", form=form)
 
 @app.route('/create_stock', methods=['POST', ])
 def create_stock():
-    company_name = request.form['company_name']
-    ticket = request.form['ticket']
-    price = request.form['price']
-    market_cap = request.form['market_cap']
+
+    form = StockForm(request.form)
+    if not form.validate_on_submit():
+        return redirect(url_for('new_stock'))
+    if form.validate_on_submit():
+        company_name = form.company_name.data
+        ticket = form.ticket.data
+        price = form.price.data
+        market_cap = form.market_cap.data
 
     stock = Stocks.query.filter_by(company_name=company_name).first()
 
@@ -48,15 +54,17 @@ def edit_stock(id):
         return redirect(url_for('login', next=url_for('update_stock')))
     stock = Stocks.query.filter_by(id=id).first()
     company_logo = return_image(id)
-    return render_template("update.html", stock=stock, company_logo=company_logo)
+    form = StockForm()
+    return render_template("update.html", stock=stock, company_logo=company_logo, form=form)
 
 @app.route('/update_stock', methods=['POST',])
 def update_stock():
     stock = Stocks.query.filter_by(id=request.form['id']).first()
-    stock.company_name = request.form['company_name']
-    stock.ticket = request.form['ticket']
-    stock.price = request.form['price']
-    stock.market_cap = request.form['market_cap']
+    form = StockForm()
+    form.company_name.data = stock.company_name 
+    form.ticket.data = stock.ticket 
+    form.price.data = stock.price 
+    form.market_cap.data = stock.market_cap 
 
     db.session.add(stock)
     db.session.commit()
@@ -92,14 +100,15 @@ def image(file_name):
 @app.route('/login')
 def login():
     next_page = request.args.get('next')
-    return render_template("login.html", next=next_page)
+    form = UsersForm()
+    return render_template("login.html", next=next_page, form=form)
 
 
 @app.route('/autentification', methods=['POST', ])
 def autentification():
-    if 'username' in request.form and 'password' in request.form:
-        user = Users.query.filter_by(nickname=request.form['username']).first()
-        password = check_password_hash(user.password, request.form['password'])
+    
+    user = Users.query.filter_by(nickname=request.form['nickname']).first()
+    password = check_password_hash(user.password, request.form['password'])
 
     if user and password:
         session['user_log'] = user.nickname
