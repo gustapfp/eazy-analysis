@@ -2,7 +2,7 @@
 {% block content %}
 <main>
     <form class="form mt-8" action="{{ url_for('update_stock' )}}" method="post" enctype="multipart/form-data">
-       
+        {{ form.csrf_token() }}
 
         <fieldset class="flex flex-col text-white items-center text-left my-2">
             <input type="hidden" name="id" value="{{ stock.id }}">
@@ -17,29 +17,24 @@
             </div>
            
             <div class="flex flex-col my-2 w-2/5">
-                <label class="font-semibold text-xl mt-4 mb-2" for="company_name">Company Name</label>
-                <input class="bg-slate-400 font-light rounded-md mb-1 py-1.5 px-1" type="text" id="company_name"
-                    name="company_name" value="{{stock.company_name}}">
+                {{ form.company_name.label(class="font-semibold text-xl mt-4 mb-2") }}
+                {{ form.company_name(class="bg-slate-400 font-light rounded-md mb-1 py-1.5 px-1") }}
             </div>
             <div class="flex flex-col my-2 w-2/5">
-                <label class="font-semibold text-xl mb-2" for="ticket">Ticket</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="ticket"
-                    name="ticket" value="{{stock.ticket}}">
+                {{ form.ticket.label(class="font-semibold text-xl mb-2") }}
+                {{ form.ticket(class="bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" ) }}
             </div>
             <div class="flex flex-col my-2 w-2/5">
-                <label class="font-semibold text-xl mb-2" for="price">Price (R$)</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="price" name="price"
-                    value="{{stock.price}}">
+                {{ form.price.label(class="font-semibold text-xl mb-2") }}
+                {{ form.price(class="bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" )  }}
             </div>
             <div class="flex flex-col mx-24  my-2 w-2/5">
-                <label class="font-semibold text-xl text-left mb-2 justify-items-start" for="market_cap">Market Cap (R$
-                    Billions)</label>
-                <input class=" bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" type="text" id="market_cap"
-                    name="market_cap" value="{{stock.market_cap}}">
+                {{ form.market_cap.label(class="font-semibold text-xl mb-2") }}
+                {{ form.market_cap(class="bg-slate-400 font-light rounded-md mb-1  py-1.5 px-1" ) }}
             </div>
 
             <div class="flex justify-center mt-8 mb-4 w-1/5">
-                <button type="submit" class=" w-full py-2.5 bg-slate-700 rounded-md font-bold">Save</button>
+                {{ form.save(class="w-full py-2.5 bg-slate-700 rounded-md font-bold") }}
             </div>
 
         </fieldset>
